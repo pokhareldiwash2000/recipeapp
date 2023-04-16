@@ -1,6 +1,6 @@
 const passport= require('passport');
 const GoogleStrategy=require('passport-google-oauth20');
-const Guser=require('../model/GoogleUser');
+const Guser=require('../model/User');
 
 
 // passport.serializeUser((user,done)=>{
@@ -33,7 +33,9 @@ passport.use(new GoogleStrategy({
             new Guser({
                 name:profile.displayName,
                 email:profile.emails[0].value,
-                googleId:profile.id
+                discriminator:"GoogleUser",
+                googleId:profile.id,
+                photo:profile.photos[0].value
             }).save().then((newUser)=>{
                 console.log("new user created");
                 done(null,newUser);

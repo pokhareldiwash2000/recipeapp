@@ -61,8 +61,9 @@ router.post('/login',async function(req,res){
     if(!validPass){return res.status(400).send({ message: 'Incorrect password' });}
 
     //create and assign a token
-    const token =jwt.sign({_id:user._id},process.env.TOKEN_SECRET);
-    res.header('auth-token',token).send({message:'Success',user:{name:user.name,_id:user._id,accessToken:token}});
+    const token =jwt.sign({_id:user._id},process.env.TOKEN_SECRET,{ expiresIn: '1h' });
+    const{password,...others}=user._doc;
+    res.header('auth-token',token).send({message:'Success',user:{user:others,accessToken:token}});
 
     // return res.status(200).send({ message: 'Success' });
 
@@ -106,8 +107,9 @@ router.get("/auth/google",passport.authenticate('google',{scope:['profile','emai
 
 router.get("/auth/google/callback", passport.authenticate('google',{ session: false }),(req, res) => {
  //create and assign a token
- const token =jwt.sign({_id:req.user._id},process.env.TOKEN_SECRET);
- res.header('auth-token',token).send({message:'Success',user:{name:req.user.name,_id:req.user._id,accessToken:token}});
+ const token =jwt.sign({_id:req.user._id},process.env.TOKEN_SECRET,{ expiresIn: '1h' });
+ const{password,...others}=req.user;
+ res.header('auth-token',token).send({message:'Success',user:{user:others,accessToken:token}});
 });
 
 

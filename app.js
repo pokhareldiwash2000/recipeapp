@@ -11,6 +11,10 @@ const passportSetup=require('./config/passport-setup');
 //inport routes
 const authRoute=require('./routes/auth');
 const postRoute=require('./routes/posts');
+const userAccountRoute=require('./routes/users');
+const mypostRoute=require('./routes/myposts')
+const commentRoute=require('./routes/comments');
+const searchRoute=require('./routes/search');
 
 const app= express();
 
@@ -19,7 +23,10 @@ app.use(bodyParser.json());
 //route middlewares
 app.use('/api/user',authRoute);
 app.use('/api/posts',postRoute);
-
+app.use('/api/myposts',mypostRoute);
+app.use('/api/account',userAccountRoute);
+app.use('/api/comment',commentRoute);
+app.use('/api/search',searchRoute);
 
 //middlewares
 // app.use(session({
