@@ -57,6 +57,11 @@ const userSchema = new mongoose.Schema({
         enum: ['OurUser', 'GoogleUser'],
         default: 'OurUser',
       },
+      role: {
+        type: String,
+        enum: ['basic', 'admin'],
+        default: 'basic',
+      }
     
 }, { discriminatorKey: 'discriminator' });
 

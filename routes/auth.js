@@ -7,6 +7,7 @@ const User= require('../model/User');
 const GUser= require('../model/GoogleUser');
 const { registerValidation, loginValidation } = require('../validation');
 const bcrypt = require('bcryptjs');
+const verify= require('../verifyToken');
 
 router.get('/',(req,res)=>{
     res.send("Bonjour!!");
@@ -39,7 +40,8 @@ router.post('/register', async function (req, res) {
         const savedUser = await user.save() ;
         return res.send({
             name: savedUser.name,
-            _id:savedUser._id
+            _id:savedUser._id,
+            role:savedUser.role
         });
     } catch (error) {
         return res.status(400).send({ message: error });
@@ -61,7 +63,7 @@ router.post('/login',async function(req,res){
     if(!validPass){return res.status(400).send({ message: 'Incorrect password' });}
 
     //create and assign a token
-    const token =jwt.sign({_id:user._id},process.env.TOKEN_SECRET,{ expiresIn: '1h' });
+    const token =jwt.sign({_id:user._id,role:user.role},process.env.TOKEN_SECRET,{ expiresIn: '1h' });
     const{password,...others}=user._doc;
     res.header('auth-token',token).send({message:'Success',user:{user:others,accessToken:token}});
 
@@ -71,7 +73,7 @@ router.post('/login',async function(req,res){
 });
 
 // Route to logout (invalidate JWT token)
-router.post('/logout', (req, res) => {
+router.post('/logout',verify, (req, res) => {
     // Get the JWT token from the request header
     const token = req.headers['auth-token'];
   
@@ -107,7 +109,7 @@ router.get("/auth/google",passport.authenticate('google',{scope:['profile','emai
 
 router.get("/auth/google/callback", passport.authenticate('google',{ session: false }),(req, res) => {
  //create and assign a token
- const token =jwt.sign({_id:req.user._id},process.env.TOKEN_SECRET,{ expiresIn: '1h' });
+ const token =jwt.sign({_id:req.user._id,role:req.user.role},process.env.TOKEN_SECRET,{ expiresIn: '1h' });
  const{password,...others}=req.user;
  res.header('auth-token',token).send({message:'Success',user:{user:others,accessToken:token}});
 });
