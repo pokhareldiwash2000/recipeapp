@@ -299,23 +299,23 @@ router.get('/photos', (req, res) => {
     });
   });
   
-  // Route for getting a list of uploaded videos
-  router.get('/videos', (req, res) => {
-    const videosDir = path.join(__dirname,'..', 'public', 'uploads', 'videos');
-    fs.readdir(videosDir, (err, files) => {
-      if (err) {
-        res.status(400).json({ message: err });
-      } else {
-        const videos = files.map((file) => {
-          return {
-            filename: file,
-            url: `/uploads/videos/${file}`,
-          };
-        });
-        res.status(200).json({ videos });
-      }
-    });
+// Route for getting a list of uploaded videos
+router.get('/videos', (req, res) => {
+  const videosDir = path.join(__dirname,'..', 'public', 'uploads', 'videos');
+  fs.readdir(videosDir, (err, files) => {
+    if (err) {
+      res.status(400).json({ message: err });
+    } else {
+      const videos = files.map((file) => {
+        return {
+          filename: file,
+          url: `/uploads/videos/${file}`,
+        };
+      });
+      res.status(200).json({ videos });
+    }
   });
+});
   
 
   
