@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
 const verify= require('../verifyToken');
 
 router.get('/',(req,res)=>{
-    res.send("Bonjour!!");
+    res.send("Bonjour!! you are in auth");
 });
 
 // Registering a new user with name, email and password
