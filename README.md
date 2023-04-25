@@ -90,3 +90,26 @@ https://recipeapp-lh51.onrender.com/api/user/auth/google
     DELETE '/api/comment/:id'
     Authorization Required: Yes
 
+//searching and filtering routes
+
+GET request to /api/search?q=search-term
+    Description: This endpoint searches for posts in the database that match the specified search term using fuzzy matching. 
+    Query Parameters:
+    q: The search term to match.
+    Response:
+    If successful, returns a JSON object containing the matched posts.
+    If unsuccessful, returns a JSON object with a message property containing an error message.
+
+GET request to /api/search/filter
+    Description: This endpoint filters posts in the database based on specified cuisine, course, and diet categories. It returns a list of filtered posts.
+    Query Parameters:
+    cuisine: The cuisine categories to filter by, separated by commas.
+    course: The course categories to filter by, separated by commas.
+    diet: The diet categories to filter by, separated by commas.
+    Response:
+    If successful, returns a JSON object containing the filtered posts.
+    If unsuccessful, returns a JSON object with a message property containing an error message.
+
+
+
+
