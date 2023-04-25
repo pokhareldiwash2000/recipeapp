@@ -15,6 +15,7 @@ const userAccountRoute=require('./routes/users');
 const mypostRoute=require('./routes/myposts')
 const commentRoute=require('./routes/comments');
 const adminRoute=require('./routes/admin');
+const searchRoute=require('./routes/search');
 
 
 const app= express();
@@ -28,6 +29,7 @@ app.use('/api/myposts',mypostRoute);
 app.use('/api/account',userAccountRoute);
 app.use('/api/comment',commentRoute);
 app.use('/api/admin',adminRoute);
+app.use('/api/search',searchRoute);
 
 //middlewares
 // app.use(session({
