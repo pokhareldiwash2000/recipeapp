@@ -49,6 +49,8 @@ https://recipeapp-lh51.onrender.com/api/user/auth/google
 
 // A user's personal control over creation of posts
 
+Very important: All the upload to the route below should be  made as form data not application/json
+
     GET '/api/myposts'
     Query Parameters: cuisine, course, diet, limit
     Description: Get all posts or filter posts by cuisine, course, or diet

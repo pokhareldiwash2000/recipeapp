@@ -26,6 +26,10 @@ const postSchema= new mongoose.Schema({
         type:String,
         default:''
     },
+    video:{
+        type:String,
+        default:''
+    },
     youtubeURL:{
         type:String,
         default:'',
