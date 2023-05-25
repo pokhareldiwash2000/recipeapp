@@ -35,24 +35,38 @@ router.post('/',
     verify,
      uploadPhoto.fields([{ name: 'photo', maxCount: 1 }, { name: 'stepsPhoto', maxCount: 10 },{ name: 'video', maxCount: 1 }]),
       async (req, res, next) => {
-  const { name, description, servings, cookingTime, prepTime, cuisinecategory, coursecategory, dietcategory } = req.body;
+  const { name, description, servings, cookingTime, prepTime} = req.body;
   const author=req.user._id;
   const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
   const steps = [];
-  req.body.steps=JSON.parse(req.body.steps);
-  const ingredients=JSON.parse(req.body.ingredients)
+  if(req.body.ingredients){
+    const ingred=JSON.parse(req.body.ingredients).map(([name, quantity]) => ({ name, quantity }));
+  req.body.ingredients=ingred;
+  }
+  if(req.body.steps){const stp=JSON.parse(req.body.steps).map(name => ({ name }));
+  req.body.steps=stp;}
+  const ingredients=req.body.ingredients;
+  const cuisinecategory= req.body.cuisinecategory?JSON.parse(req.body.cuisinecategory):"";
+  const coursecategory= req.body.coursecategory?JSON.parse(req.body.coursecategory):"";
+  const dietcategory= req.body.dietcategory?JSON.parse(req.body.dietcategory):"";
+  // console.log(req.body.steps);
+  // req.body.steps=JSON.parse(req.body.steps);
+  
+  // const ingredients=JSON.parse(req.body.ingredients)
+
   if (req.body.steps && req.body.steps.length) {
     for (let i = 0; i < req.body.steps.length; i++) {
       const step = { name: req.body.steps[i].name };
       if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
-        step.photo = `/media/${req.files['stepsPhoto'][0].filename}`;
+        step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
       }
       steps.push(step);
     }
   }
   const youtubeURL = req.body.youtubeURL || '';
   const video = req.files['video'] ? `/media/${req.files['video'][0].filename}`: '';
-  const post = new Post({ author, name, description, photo, youtubeURL, servings, cookingTime, prepTime, ingredients, steps, cuisinecategory, coursecategory, dietcategory, video });
+  
+  const post = new Post({ author, name, description, photo, youtubeURL, servings, cookingTime, prepTime,ingredients, steps, cuisinecategory, coursecategory, dietcategory, video });
   try {
     const result = await post.save();
     res.status(201).json({ message: 'Post created successfully.', post: result });
@@ -77,7 +91,17 @@ router.patch('/:id',
     if (!(p.author == req.user._id)) {
       return res.status(404).send('Not authorized to update this post');
     }
-  
+    if(req.body.ingredients){
+      const ingred=JSON.parse(req.body.ingredients).map(([name, quantity]) => ({ name, quantity }));
+    req.body.ingredients=ingred;
+    }
+    if(req.body.steps){const stp=JSON.parse(req.body.steps).map(name => ({ name }));
+    req.body.steps=stp;}
+    const ingredients=req.body.ingredients?req.body.ingredients:p.ingredients;
+    const cuisinecategory= req.body.cuisinecategory?JSON.parse(req.body.cuisinecategory):p.cuisinecategory;
+    const coursecategory= req.body.coursecategory?JSON.parse(req.body.coursecategory):p.coursecategory;
+    const dietcategory= req.body.dietcategory?JSON.parse(req.body.dietcategory):p.dietcategory;
+
     req.body= Object.assign({}, p, req.body);
     const { 
       name, 
@@ -85,35 +109,37 @@ router.patch('/:id',
       servings, 
       cookingTime, 
       prepTime, 
-      cuisinecategory, 
-      coursecategory, 
-      dietcategory 
     } = req.body;
+  
     const author=req.user._id;
     let photo = p.photo;
     if (req.files['photo']) {
-      fs.unlink(`./public${p.photo}`, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      if(p.photo.length!==0){
+        fs.unlink(`./public${p.photo}`, (err) => {
+          if (err) {
+            console.log(err);
+            console.log("photo error")
+          }
+        });
+      }
       photo = `/media/${req.files['photo'][0].filename}`;
     }
-
-    const ingredients=JSON.parse(req.body.ingredients)
     let steps = p.steps;
     if (req.body.steps) {
       steps = [];
-      req.body.steps = JSON.parse(req.body.steps);
+      // req.body.steps = JSON.parse(req.body.steps);
       if (req.body.steps.length) {
         for (let i = 0; i < req.body.steps.length; i++) {
           const step = { name: req.body.steps[i].name };
           if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
-            fs.unlink(`./public${p.steps[i].photo}`, (err) => {
-              if (err) {
-                console.log(err);
-              }
-            });
+            if(p.steps.length!==0){
+              fs.unlink(`./public${p.steps[i].photo}`, (err) => {
+                if (err) {
+                  console.log(err);
+                  console.log("stepsPhoto error")
+                }
+              });
+            }
             step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
           } else {
             step.photo = p.steps[i].photo;
@@ -125,18 +151,23 @@ router.patch('/:id',
     const youtubeURL = req.body.youtubeURL || p.youtubeURL;
     let video = p.video;
     if (req.files['video']) {
-      fs.unlink(`./public${p.video}`, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      if(p.video.length!==0){
+        fs.unlink(`./public${p.video}`, (err) => {
+          if (err) {
+            console.log(err);
+            console.log("video error")
+          }
+        });
+      }
       video = `/media/${req.files['video'][0].filename}`;
-    } try {
+    }
+    
+    try {
       const post = await Post.findByIdAndUpdate(postId, { author, name, description, photo, youtubeURL, servings, cookingTime, prepTime, ingredients, steps, cuisinecategory, coursecategory, dietcategory, video }, { new: true });
       res.status(200).json({ message: 'Post updated successfully.', post: post });
     } catch (err) {
-      console.log(err);
-      res.status(500).json({ error: err });
+      console.log(err.message);
+      res.status(500).json({ message: 'couldnot update post' });
     }
   }
   catch(err){
@@ -144,7 +175,6 @@ router.patch('/:id',
   }
   
 });
-
 
 //Get all post or get posts by sending query string cuisine=,diet=,course=,limit=
 router.get('/',verify, async (req, res) => {

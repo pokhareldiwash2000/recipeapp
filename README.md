@@ -112,6 +112,11 @@ GET request to /api/search/filter
     If successful, returns a JSON object containing the filtered posts.
     If unsuccessful, returns a JSON object with a message property containing an error message.
 
+FIltering functionalities
 
+you can filter by going to api/filter/new, api/filter/most-viewed, api/filter/most-interacted, api/filter/popular, api/filter/trending
+
+you can also send pagination and limit as query
+by default page=1, limit=10
 
 

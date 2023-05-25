@@ -16,12 +16,13 @@ const mypostRoute=require('./routes/myposts')
 const commentRoute=require('./routes/comments');
 const adminRoute=require('./routes/admin');
 const searchRoute=require('./routes/search');
+const filterRoute=require('./routes/filter');
 
 
 const app= express();
 
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 //route middlewares
 app.use('/api/user',authRoute);
 app.use('/api/posts',postRoute);
@@ -30,7 +31,10 @@ app.use('/api/account',userAccountRoute);
 app.use('/api/comment',commentRoute);
 app.use('/api/admin',adminRoute);
 app.use('/api/search',searchRoute);
+app.use('/api/filter',filterRoute);
 
+//serving static files 
+app.use(express.static('public'));
 //middlewares
 // app.use(session({
 //   secret: process.env.COOKIE_KEY,
@@ -47,8 +51,8 @@ mongoose
   .then(() => console.log("💻 Mondodb Connected"))
   .catch(err => console.error(err));
 
-app.get('/',(req,res)=>{
-    res.send('Welcome to food recipe app');
+app.get('/', (req, res) => {
+  res.send("Welcome to the recipe app. ");
 });
 
 app.listen(process.env.PORT,()=>{
