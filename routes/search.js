@@ -4,12 +4,12 @@ const Post = require('../model/Posts');
 const FuzzySet = require('fuzzyset.js');
 
 
-// GET request to /search?q=<search-term>
+// post request to /search?q=<search-term>
 
-router.get('/', async (req, res) => {
-  const searchTerm = req.query.q;
+router.post('/', async (req, res) => {
+  const searchTerm = req.body.q;
   const threshold = 0.3; // adjust this to control the threshold for fuzzy matching
-  if (!searchTerm || typeof searchTerm !== 'string') {
+  if (!searchTerm ) {
     res.status(400).json({ message: 'Invalid search term' });
     return;
   }
@@ -39,10 +39,10 @@ router.get('/', async (req, res) => {
 });
 
 //filtering 
-router.get('/filter', async (req, res) => {
-    const cuisineTerm = req.query.cuisine;
-    const courseTerm = req.query.course;
-    const dietTerm = req.query.diet;
+router.post('/filter', async (req, res) => {
+    const cuisineTerm = req.body.cuisine;
+    const courseTerm = req.body.course;
+    const dietTerm = req.body.diet;
   
     try {
       let query = {};
