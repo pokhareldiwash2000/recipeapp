@@ -1,5 +1,6 @@
 //Imports
 const express= require('express');
+const cors = require('cors');
 const mongoose= require('mongoose');
 require('dotenv').config();
 const bodyParser = require("body-parser");
@@ -34,13 +35,13 @@ app.use('/api/search',searchRoute);
 app.use('/api/filter',filterRoute);
 
 // Enable CORS for all routes
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE ,PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, auth-token');
-  next();
-});
-
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE ,PATCH');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, auth-token');
+//   next();
+// });
+app.use(cors());
 //serving static files 
 app.use(express.static('public'));
 //middlewares
