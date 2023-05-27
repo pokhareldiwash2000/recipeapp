@@ -35,20 +35,21 @@ router.post('/',
     verify,
      uploadPhoto.fields([{ name: 'photo', maxCount: 1 }, { name: 'stepsPhoto', maxCount: 10 },{ name: 'video', maxCount: 1 }]),
       async (req, res, next) => {
+  
   const { name, description, servings, cookingTime, prepTime} = req.body;
   const author=req.user._id;
   const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
   const steps = [];
   if(req.body.ingredients){
-    const ingred=JSON.parse(req.body.ingredients).map(([name, quantity]) => ({ name, quantity }));
+    const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
   req.body.ingredients=ingred;
   }
-  if(req.body.steps){const stp=JSON.parse(req.body.steps).map(name => ({ name }));
+  if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
   req.body.steps=stp;}
   const ingredients=req.body.ingredients;
-  const cuisinecategory= req.body.cuisinecategory?JSON.parse(req.body.cuisinecategory):"";
-  const coursecategory= req.body.coursecategory?JSON.parse(req.body.coursecategory):"";
-  const dietcategory= req.body.dietcategory?JSON.parse(req.body.dietcategory):"";
+  const cuisinecategory= req.body.cuisinecategory?req.body.cuisinecategory:[];
+  const coursecategory= req.body.coursecategory?req.body.coursecategory:[];
+  const dietcategory= req.body.dietcategory?req.body.dietcategory:[];
   // console.log(req.body.steps);
   // req.body.steps=JSON.parse(req.body.steps);
   
@@ -92,15 +93,15 @@ router.patch('/:id',
       return res.status(404).send('Not authorized to update this post');
     }
     if(req.body.ingredients){
-      const ingred=JSON.parse(req.body.ingredients).map(([name, quantity]) => ({ name, quantity }));
+      const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
     req.body.ingredients=ingred;
     }
-    if(req.body.steps){const stp=JSON.parse(req.body.steps).map(name => ({ name }));
+    if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
     req.body.steps=stp;}
     const ingredients=req.body.ingredients?req.body.ingredients:p.ingredients;
-    const cuisinecategory= req.body.cuisinecategory?JSON.parse(req.body.cuisinecategory):p.cuisinecategory;
-    const coursecategory= req.body.coursecategory?JSON.parse(req.body.coursecategory):p.coursecategory;
-    const dietcategory= req.body.dietcategory?JSON.parse(req.body.dietcategory):p.dietcategory;
+    const cuisinecategory= req.body.cuisinecategory?req.body.cuisinecategory:p.cuisinecategory;
+    const coursecategory= req.body.coursecategory?req.body.coursecategory:p.coursecategory;
+    const dietcategory= req.body.dietcategory?req.body.dietcategory:p.dietcategory;
 
     req.body= Object.assign({}, p, req.body);
     const { 
