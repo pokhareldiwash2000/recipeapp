@@ -19,7 +19,7 @@ https://recipeapp-lh51.onrender.com/api/user/auth/google
     PUT /api/account/:id     change username and password  takes in either 'name' or 'password' 
     POST /api/account/profile-picture    upload or change profile pic, takes in file as form-data under key 'photo'
 
-//admin functionalities
+//admin functionalities  for admin
     POST '/api/admin/register' route to register a new admin user
     GET 'api/admin/finduser/:id' route to get user information by ID
     GET 'api/admin/findme' route to get own profile information
