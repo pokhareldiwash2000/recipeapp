@@ -21,7 +21,7 @@ const filterRoute=require('./routes/filter');
 
 
 const app= express();
-
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 // app.use(bodyParser.json());
 //route middlewares
@@ -41,7 +41,7 @@ app.use('/api/filter',filterRoute);
 //   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, auth-token');
 //   next();
 // });
-app.use(cors());
+
 //serving static files 
 app.use(express.static('public'));
 //middlewares
