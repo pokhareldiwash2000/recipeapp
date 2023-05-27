@@ -34,7 +34,7 @@ app.use('/api/admin',adminRoute);
 app.use('/api/search',searchRoute);
 app.use('/api/filter',filterRoute);
 
-Enable CORS for all routes
+// Enable CORS for all routes
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000/');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE ,PATCH');
