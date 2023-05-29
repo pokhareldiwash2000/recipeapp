@@ -18,6 +18,7 @@ const commentRoute=require('./routes/comments');
 const adminRoute=require('./routes/admin');
 const searchRoute=require('./routes/search');
 const filterRoute=require('./routes/filter');
+const mailRoute=require('./routes/mails');
 
 
 const app= express();
@@ -33,6 +34,7 @@ app.use('/api/comment',commentRoute);
 app.use('/api/admin',adminRoute);
 app.use('/api/search',searchRoute);
 app.use('/api/filter',filterRoute);
+app.use('/api/mails',mailRoute);
 
 // // Enable CORS for all routes
 // app.use((req, res, next) => {

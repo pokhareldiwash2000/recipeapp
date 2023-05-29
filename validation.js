@@ -52,6 +52,19 @@ const postValidation =(data)=>{
     });
     return validationSchema.validate(data);
 }
+
+const mailValidation =(data)=>{
+
+  const mailvalidationSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    message: Joi.string().required()
+  });
+  return mailvalidationSchema.validate(data);
+}
+
+
 module.exports.registerValidation=registerValidation;
 module.exports.loginValidation=loginValidation;
 module.exports.postValidation=postValidation;
+module.exports.mailValidation=mailValidation;
