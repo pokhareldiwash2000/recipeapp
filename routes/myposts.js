@@ -35,15 +35,14 @@ router.post('/',
     verify,
      uploadPhoto.fields([{ name: 'photo', maxCount: 1 }, { name: 'stepsPhoto', maxCount: 10 },{ name: 'video', maxCount: 1 }]),
       async (req, res, next) => {
-  
   const { name, description, servings, cookingTime, prepTime} = req.body;
   const author=req.user._id;
   const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
   const steps = [];
-  if(req.body.ingredients){
-    const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
-  req.body.ingredients=ingred;
-  }
+  // if(req.body.ingredients){
+  //   const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
+  // req.body.ingredients=ingred;
+  // }
   if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
   req.body.steps=stp;}
   const ingredients=req.body.ingredients;
@@ -92,10 +91,10 @@ router.patch('/:id',
     if (!(p.author == req.user._id)) {
       return res.status(404).send('Not authorized to update this post');
     }
-    if(req.body.ingredients){
-      const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
-    req.body.ingredients=ingred;
-    }
+    // if(req.body.ingredients){
+    //   const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
+    // req.body.ingredients=ingred;
+    // }
     if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
     req.body.steps=stp;}
     const ingredients=req.body.ingredients?req.body.ingredients:p.ingredients;
@@ -115,7 +114,7 @@ router.patch('/:id',
     const author=req.user._id;
     let photo = p.photo;
     if (req.files['photo']) {
-      if(p.photo.length!==0){
+      if(p.photo){
         fs.unlink(`./public${p.photo}`, (err) => {
           if (err) {
             console.log(err);
@@ -142,9 +141,7 @@ router.patch('/:id',
               });
             }
             step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
-          } else {
-            step.photo = p.steps[i].photo;
-          }
+          } 
           steps.push(step);
         }
       }
@@ -152,7 +149,7 @@ router.patch('/:id',
     const youtubeURL = req.body.youtubeURL || p.youtubeURL;
     let video = p.video;
     if (req.files['video']) {
-      if(p.video.length!==0){
+      if(p.video){
         fs.unlink(`./public${p.video}`, (err) => {
           if (err) {
             console.log(err);
@@ -173,6 +170,7 @@ router.patch('/:id',
   }
   catch(err){
     res.status(500).json({ error: err });
+    
   }
   
 });
