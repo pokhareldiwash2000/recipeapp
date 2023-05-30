@@ -90,23 +90,53 @@ router.get('/findme',verify,admin, async (req, res) => {
     }
   });
 
-// GET a user by email
-router.get('/finduser', verify,admin,async (req, res) => {
-    const userEmail = req.query.email;
+// // GET a user by email
+// router.get('/finduser', verify,admin,async (req, res) => {
+//     const userEmail = req.query.email;
   
-    try {
-      const user = await User.findOne({email:userEmail});
+//     try {
+//       const user = await User.findOne({email:userEmail});
   
-      if (!user) {
-        return res.status(404).send('User not found');
-      }
-      const{password,...others}=user._doc
-      res.send({user:others});
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Failed to get user information');
+//       if (!user) {
+//         return res.status(404).send('User not found');
+//       }
+//       const{password,...others}=user._doc
+//       res.send({user:others});
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).send('Failed to get user information');
+//     }
+// });
+// GET all users with pagination
+router.get('/all', verify, admin, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // Current page number
+    const limit = parseInt(req.query.limit) || 10; // Number of results per page
+
+    // Calculate the number of documents to skip based on the page and limit
+    const skip = (page - 1) * limit;
+
+    const users = await User.find()
+    .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    if (users.length === 0) {
+      return res.status(404).send('No users found');
     }
+
+    const modifiedUsers = users.map((user) => {
+      const { password, ...others } = user._doc;
+      return others;
+    });
+
+    res.send({ users: modifiedUsers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Failed to get user information');
+  }
 });
+
 
 // DELETE route to delete an user account 
 router.delete('/deleteuser/:id',verify,admin, async (req, res) => {
