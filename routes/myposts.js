@@ -76,6 +76,72 @@ const uploadPhoto = multer({ storage: storagePhoto, fileFilter: fileFilterImage 
 //   }
 // });
 // Create a new post
+// router.post(
+//   '/',
+//   verify,
+//   uploadPhoto.fields([
+//     { name: 'photo', maxCount: 1 },
+//     { name: 'stepsPhoto', maxCount: 10 },
+//     { name: 'video', maxCount: 1 },
+//   ]),
+//   async (req, res, next) => {
+//     res.send(req.body);
+//     try {
+//       const { name, description, servings, cookingTime, prepTime } = req.body;
+//       const author = req.user._id;
+//       const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
+//       const steps = [];
+//       const ingredients = req.body.ingredients;
+//       const cuisinecategory = req.body.cuisinecategory ? req.body.cuisinecategory : [];
+//       const coursecategory = req.body.coursecategory ? req.body.coursecategory : [];
+//       const dietcategory = req.body.dietcategory ? req.body.dietcategory : [];
+//       const youtubeURL = req.body.youtubeURL || '';
+//       const video = req.files['video'] ? `/media/${req.files['video'][0].filename}` : '';
+
+//       if (req.body.steps && req.body.steps.length) {
+//         for (let i = 0; i < req.body.steps.length; i++) {
+//           const step = { name: req.body.steps[i].name };
+//           if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
+//             step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
+//           }
+//           steps.push(step);
+//         }
+//       }
+
+//       const post = new Post({
+//         author,
+//         name,
+//         description,
+//         photo,
+//         youtubeURL,
+//         servings,
+//         cookingTime,
+//         prepTime,
+//         ingredients,
+//         steps,
+//         cuisinecategory,
+//         coursecategory,
+//         dietcategory,
+//         video,
+//       });
+
+//       // Set a timeout of 10 seconds
+//       const timeout = setTimeout(() => {
+//         throw new Error('Request timed out');
+//       }, 10000);
+
+//       const result = await post.save();
+
+//       clearTimeout(timeout); // Clear the timeout since the request completed successfully
+
+//       res.status(201).json({ message: 'Post created successfully.', post: result });
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'An error occurred while processing the request.' });
+//     }
+//   }
+// );
+// Create a new post
 router.post(
   '/',
   verify,
@@ -86,61 +152,7 @@ router.post(
   ]),
   async (req, res, next) => {
     res.send(req.body);
-    try {
-      const { name, description, servings, cookingTime, prepTime } = req.body;
-      const author = req.user._id;
-      const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
-      const steps = [];
-      const ingredients = req.body.ingredients;
-      const cuisinecategory = req.body.cuisinecategory ? req.body.cuisinecategory : [];
-      const coursecategory = req.body.coursecategory ? req.body.coursecategory : [];
-      const dietcategory = req.body.dietcategory ? req.body.dietcategory : [];
-      const youtubeURL = req.body.youtubeURL || '';
-      const video = req.files['video'] ? `/media/${req.files['video'][0].filename}` : '';
-
-      if (req.body.steps && req.body.steps.length) {
-        for (let i = 0; i < req.body.steps.length; i++) {
-          const step = { name: req.body.steps[i].name };
-          if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
-            step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
-          }
-          steps.push(step);
-        }
-      }
-
-      const post = new Post({
-        author,
-        name,
-        description,
-        photo,
-        youtubeURL,
-        servings,
-        cookingTime,
-        prepTime,
-        ingredients,
-        steps,
-        cuisinecategory,
-        coursecategory,
-        dietcategory,
-        video,
-      });
-
-      // Set a timeout of 10 seconds
-      const timeout = setTimeout(() => {
-        throw new Error('Request timed out');
-      }, 10000);
-
-      const result = await post.save();
-
-      clearTimeout(timeout); // Clear the timeout since the request completed successfully
-
-      res.status(201).json({ message: 'Post created successfully.', post: result });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'An error occurred while processing the request.' });
-    }
-  }
-);
+  });
 
 
 // Update an existing post
