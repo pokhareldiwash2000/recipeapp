@@ -85,6 +85,7 @@ router.post(
     { name: 'video', maxCount: 1 },
   ]),
   async (req, res, next) => {
+    res.send(req.body);
     try {
       const { name, description, servings, cookingTime, prepTime } = req.body;
       const author = req.user._id;
