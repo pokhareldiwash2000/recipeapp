@@ -30,51 +30,116 @@ const fileFilterImage = (req, file, cb) => {
 
 const uploadPhoto = multer({ storage: storagePhoto, fileFilter: fileFilterImage });
 
-// Create a new post
-router.post('/',
-    verify,
-     uploadPhoto.fields([{ name: 'photo', maxCount: 1 }, { name: 'stepsPhoto', maxCount: 10 },{ name: 'video', maxCount: 1 }]),
-      async (req, res, next) => {
-  const { name, description, servings, cookingTime, prepTime} = req.body;
-  const author=req.user._id;
-  const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
-  const steps = [];
-  // if(req.body.ingredients){
-  //   const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
-  // req.body.ingredients=ingred;
-  // }
-  // if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
-  // req.body.steps=stp;}
-  const ingredients=req.body.ingredients;
-  const cuisinecategory= req.body.cuisinecategory?req.body.cuisinecategory:[];
-  const coursecategory= req.body.coursecategory?req.body.coursecategory:[];
-  const dietcategory= req.body.dietcategory?req.body.dietcategory:[];
-  // console.log(req.body.steps);
-  // req.body.steps=JSON.parse(req.body.steps);
+// // Create a new post
+// router.post('/',
+//     verify,
+//      uploadPhoto.fields([{ name: 'photo', maxCount: 1 }, { name: 'stepsPhoto', maxCount: 10 },{ name: 'video', maxCount: 1 }]),
+//       async (req, res, next) => {
+//   const { name, description, servings, cookingTime, prepTime} = req.body;
+//   const author=req.user._id;
+//   const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
+//   const steps = [];
+//   // if(req.body.ingredients){
+//   //   const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
+//   // req.body.ingredients=ingred;
+//   // }
+//   // if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
+//   // req.body.steps=stp;}
+//   const ingredients=req.body.ingredients;
+//   const cuisinecategory= req.body.cuisinecategory?req.body.cuisinecategory:[];
+//   const coursecategory= req.body.coursecategory?req.body.coursecategory:[];
+//   const dietcategory= req.body.dietcategory?req.body.dietcategory:[];
+//   // console.log(req.body.steps);
+//   // req.body.steps=JSON.parse(req.body.steps);
   
-  // const ingredients=JSON.parse(req.body.ingredients)
+//   // const ingredients=JSON.parse(req.body.ingredients)
 
-  if (req.body.steps && req.body.steps.length) {
-    for (let i = 0; i < req.body.steps.length; i++) {
-      const step = { name: req.body.steps[i].name };
-      if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
-        step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
+//   if (req.body.steps && req.body.steps.length) {
+//     for (let i = 0; i < req.body.steps.length; i++) {
+//       const step = { name: req.body.steps[i].name };
+//       if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
+//         step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
+//       }
+//       steps.push(step);
+//     }
+//   }
+//   const youtubeURL = req.body.youtubeURL || '';
+//   const video = req.files['video'] ? `/media/${req.files['video'][0].filename}`: '';
+  
+//   const post = new Post({ author, name, description, photo, youtubeURL, servings, cookingTime, prepTime,ingredients, steps, cuisinecategory, coursecategory, dietcategory, video });
+//   try {
+//     const result = await post.save();
+//     res.status(201).json({ message: 'Post created successfully.', post: result });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: err });
+//   }
+// });
+// Create a new post
+router.post(
+  '/',
+  verify,
+  uploadPhoto.fields([
+    { name: 'photo', maxCount: 1 },
+    { name: 'stepsPhoto', maxCount: 10 },
+    { name: 'video', maxCount: 1 },
+  ]),
+  async (req, res, next) => {
+    try {
+      const { name, description, servings, cookingTime, prepTime } = req.body;
+      const author = req.user._id;
+      const photo = req.files['photo'] ? `/media/${req.files['photo'][0].filename}` : '';
+      const steps = [];
+      const ingredients = req.body.ingredients;
+      const cuisinecategory = req.body.cuisinecategory ? req.body.cuisinecategory : [];
+      const coursecategory = req.body.coursecategory ? req.body.coursecategory : [];
+      const dietcategory = req.body.dietcategory ? req.body.dietcategory : [];
+      const youtubeURL = req.body.youtubeURL || '';
+      const video = req.files['video'] ? `/media/${req.files['video'][0].filename}` : '';
+
+      if (req.body.steps && req.body.steps.length) {
+        for (let i = 0; i < req.body.steps.length; i++) {
+          const step = { name: req.body.steps[i].name };
+          if (req.files['stepsPhoto'] && req.files['stepsPhoto'][i]) {
+            step.photo = `/media/${req.files['stepsPhoto'][i].filename}`;
+          }
+          steps.push(step);
+        }
       }
-      steps.push(step);
+
+      const post = new Post({
+        author,
+        name,
+        description,
+        photo,
+        youtubeURL,
+        servings,
+        cookingTime,
+        prepTime,
+        ingredients,
+        steps,
+        cuisinecategory,
+        coursecategory,
+        dietcategory,
+        video,
+      });
+
+      // Set a timeout of 10 seconds
+      const timeout = setTimeout(() => {
+        throw new Error('Request timed out');
+      }, 10000);
+
+      const result = await post.save();
+
+      clearTimeout(timeout); // Clear the timeout since the request completed successfully
+
+      res.status(201).json({ message: 'Post created successfully.', post: result });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while processing the request.' });
     }
   }
-  const youtubeURL = req.body.youtubeURL || '';
-  const video = req.files['video'] ? `/media/${req.files['video'][0].filename}`: '';
-  
-  const post = new Post({ author, name, description, photo, youtubeURL, servings, cookingTime, prepTime,ingredients, steps, cuisinecategory, coursecategory, dietcategory, video });
-  try {
-    const result = await post.save();
-    res.status(201).json({ message: 'Post created successfully.', post: result });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: err });
-  }
-});
+);
 
 
 // Update an existing post
