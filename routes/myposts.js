@@ -43,8 +43,8 @@ router.post('/',
   //   const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
   // req.body.ingredients=ingred;
   // }
-  if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
-  req.body.steps=stp;}
+  // if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
+  // req.body.steps=stp;}
   const ingredients=req.body.ingredients;
   const cuisinecategory= req.body.cuisinecategory?req.body.cuisinecategory:[];
   const coursecategory= req.body.coursecategory?req.body.coursecategory:[];
@@ -95,8 +95,8 @@ router.patch('/:id',
     //   const ingred=req.body.ingredients.map(([name, quantity]) => ({ name, quantity }));
     // req.body.ingredients=ingred;
     // }
-    if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
-    req.body.steps=stp;}
+    // if(req.body.steps){const stp=req.body.steps.map(name => ({ name }));
+    // req.body.steps=stp;}
     const ingredients=req.body.ingredients?req.body.ingredients:p.ingredients;
     const cuisinecategory= req.body.cuisinecategory?req.body.cuisinecategory:p.cuisinecategory;
     const coursecategory= req.body.coursecategory?req.body.coursecategory:p.coursecategory;
