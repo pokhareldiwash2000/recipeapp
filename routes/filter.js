@@ -39,7 +39,7 @@ router.get('/trending', async (req, res) => {
     const totalPages = Math.ceil(totalCount / limit);
 
     const trendingPosts = await Post.find()
-      .sort({ rating: -1, createdAt: -1 })
+      .sort({ rating: -1, date: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       // .populate('comments');
@@ -65,7 +65,7 @@ router.get('/new', async (req, res) => {
     const totalPages = Math.ceil(totalCount / limit);
 
     const newPosts = await Post.find()
-      .sort({ createdAt: -1 })
+      .sort({ date: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       // .populate('comments');
