@@ -16,7 +16,7 @@ router.get('/popular', async (req, res) => {
       .sort({ totalreviewscore:-1,rating: -1, totalReviews: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .populate('comments');
+      // .populate('comments');
 
     res.json({
       page,
@@ -42,7 +42,7 @@ router.get('/trending', async (req, res) => {
       .sort({ rating: -1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .populate('comments');
+      // .populate('comments');
 
     res.json({
       page,
@@ -68,7 +68,7 @@ router.get('/new', async (req, res) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .populate('comments');
+      // .populate('comments');
 
     res.json({
       page,
@@ -94,7 +94,7 @@ router.get('/most-viewed', async (req, res) => {
       .sort({ totalreviews: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .populate('comments');
+      // .populate('comments');
 
     res.json({
       page,

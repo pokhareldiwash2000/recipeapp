@@ -21,6 +21,7 @@ https://recipeapp-lh51.onrender.com/api/user/auth/google
 
 //admin functionalities  for admin
     POST '/api/admin/register' route to register a new admin user
+    GET 'api/admin/all' route to get all current user. can send :limit&page as params
     GET 'api/admin/finduser/:id' route to get user information by ID
     GET 'api/admin/findme' route to get own profile information
     GET 'api/admin/finduser' route to get user information by email query api/admin/finduser?email="example@fh.com"
@@ -36,6 +37,12 @@ https://recipeapp-lh51.onrender.com/api/user/auth/google
     GET '/photos' - Route for getting a list of uploaded photos
     GET '/videos' - Route for getting a list of uploaded videos
 
+// admin functionality for handling mails
+    POST 'api/mails'  payload: {name, email, message} 
+    GET 'api/mails'     get all the mails
+    GET 'api/mails/:id' get a specific mail by id
+    DELETE 'api/mails/:id' delete a particaular mail 
+
 //dashboard posts related functionalities
     GET '/api/posts'
     Description: This endpoint is used to retrieve posts from the database based on optional query parameters.
@@ -49,7 +56,7 @@ https://recipeapp-lh51.onrender.com/api/user/auth/google
 
 // A user's personal control over creation of posts
 
-Very important: All the upload to the route below should be  made as form data not application/json
+Very important: All the upload to the route below should be  made as multipart/form-data not application/json
 
     GET '/api/myposts'
     Query Parameters: cuisine, course, diet, limit

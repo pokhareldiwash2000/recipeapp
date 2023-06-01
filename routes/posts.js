@@ -22,7 +22,8 @@ router.get('/', async (req, res) => {
     }
   
     try {
-      const posts = await Post.find(query).limit(Number(limit)).populate('comments');
+      const posts = await Post.find(query).limit(Number(limit))
+      // .populate('comments');
       res.json(posts);
     } catch (err) {
       console.error(err);

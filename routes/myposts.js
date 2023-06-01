@@ -195,7 +195,9 @@ router.get('/',verify, async (req, res) => {
       query.dietcategory = { $in: [diet] };
     }
     try {
-      const posts = await Post.find(query).populate('comments').limit(Number(limit));
+      const posts = await Post.find(query)
+      // .populate('comments')
+      .limit(Number(limit));
       res.json(posts);
     } catch (err) {
       console.error(err);
